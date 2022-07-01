@@ -6,16 +6,16 @@ var libs = process.cwd() + "/libs/";
 var log = require(libs + "log")(module);
 
 var db = require(libs + "db/mongoose");
-var Article = require(libs + "model/article");
+var Task = require(libs + "model/task");
 
-// List all articles
+// List all tasks
 router.get(
-  "/",
+  "/:email",
   passport.authenticate("bearer", { session: false }),
   function (req, res) {
-    Article.find(function (err, articles) {
+    Task.find({ email: req.params.email }, function (err, tasks) {
       if (!err) {
-        return res.json(articles);
+        return res.json(tasks);
       } else {
         res.statusCode = 500;
 
@@ -29,24 +29,25 @@ router.get(
   }
 );
 
-// Create article
+// Create task
 router.post(
-  "/",
+  "/:email",
   passport.authenticate("bearer", { session: false }),
   function (req, res) {
-    var article = new Article({
+    var task = new Task({
       title: req.body.title,
-      author: req.body.author,
-      description: req.body.description,
-      images: req.body.images,
+      email: req.body.email,
     });
 
-    article.save(function (err) {
+    console.log("task-->");
+    console.log(task);
+
+    task.save(function (err) {
       if (!err) {
-        log.info("New article created with id: %s", article.id);
+        log.info("New task created with id: %s", task.id);
         return res.json({
           status: "OK",
-          article: article,
+          task: task,
         });
       } else {
         if (err.name === "ValidationError") {
@@ -69,24 +70,24 @@ router.post(
   }
 );
 
-// Get article
+// Get task
 router.get(
-  "/:id",
+  "/:email/:id",
   passport.authenticate("bearer", { session: false }),
   function (req, res) {
-    Article.findById(req.params.id, function (err, article) {
-      if (!article) {
+    Task.findById(req.params.id, function (err, task) {
+      if (!task) {
         res.statusCode = 404;
 
         return res.json({
-          error: "Not found article",
+          error: "Not found--task route",
         });
       }
 
       if (!err) {
         return res.json({
           status: "OK",
-          article: article,
+          task: task,
         });
       } else {
         res.statusCode = 500;
@@ -100,41 +101,38 @@ router.get(
   }
 );
 
-// Update article
+// Update task
 router.put(
-  "/:id",
+  "/:email/:id",
   passport.authenticate("bearer", { session: false }),
   function (req, res) {
-    var articleId = req.params.id;
+    var taskId = req.params.id;
 
-    Article.findById(articleId, function (err, article) {
-      if (!article) {
+    Task.findById(taskId, function (err, task) {
+      if (!task) {
         res.statusCode = 404;
-        log.error("Article with id: %s Not Found", articleId);
+        log.error("Task with id: %s Not Found", taskId);
         return res.json({
-          error: "Not found - article two",
+          error: "Not found - tasks route second",
         });
       }
 
       if (req.body.title) {
-        article.title = req.body.title;
+        task.title = req.body.title;
       }
-      if (req.body.description) {
-        article.description = req.body.description;
+      if (req.body.email) {
+        task.email = req.body.email;
       }
-      if (req.body.author) {
-        article.author = req.body.author;
-      }
-      if (req.body.images) {
-        article.images = req.body.images;
+      if (req.body.completed) {
+        task.completed = req.body.completed;
       }
 
-      article.save(function (err) {
+      task.save(function (err) {
         if (!err) {
-          log.info("Article with id: %s updated", article.id);
+          log.info("Task with id: %s updated", task.id);
           return res.json({
             status: "OK",
-            article: article,
+            task: task,
           });
         } else {
           if (err.name === "ValidationError") {
@@ -156,26 +154,26 @@ router.put(
   }
 );
 
-// Get article
+// Get task
 router.delete(
-  "/:id",
+  "/:email/:id",
   passport.authenticate("bearer", { session: false }),
   function (req, res) {
-    Article.findById(req.params.id, function (err, article) {
-      if (!article) {
+    Task.findById(req.params.id, function (err, task) {
+      if (!task) {
         res.statusCode = 404;
 
         return res.json({
-          error: "Not found - article three",
+          error: "Not found - task route third",
         });
       }
 
-      article.delete(function (err) {
+      task.delete(function (err) {
         if (!err) {
-          log.info("Article with id: %s deleted", article.id);
+          log.info("Task with id: %s deleted", task.id);
           return res.json({
             status: "OK",
-            article: article,
+            task: task,
           });
         } else {
           if (err.name === "ValidationError") {

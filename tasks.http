@@ -1,0 +1,81 @@
+@baseUrl = http://localhost:1337
+@id = 62be9c772fa90a9a27dca060
+@client_id = terminalTodo
+@client_secret = terminalTodoSsecret
+@username=raghav
+@password=123123
+@email=em@d.com
+
+### 
+GET {{baseUrl}}/api/tasks/{{email}}
+Authorization: Bearer {{refauth.response.body.access_token}}
+
+
+###
+GET {{baseUrl}}/api/tasks/{{email}}/{{id}}
+Authorization: Bearer {{refauth.response.body.access_token}}
+
+
+###
+POST {{baseUrl}}/api/tasks/{{email}}
+Authorization: Bearer {{refauth.response.body.access_token}}
+Content-Type: application/json
+
+{
+    "title":"new task 3",
+    "email":"em@d.com"
+}
+
+
+###
+PUT {{baseUrl}}/api/tasks/{{email}}/{{id}}
+Authorization: Bearer {{refauth.response.body.access_token}}
+Content-Type: application/json
+
+{
+    "completed": true
+}
+
+# ---------------------------
+
+###
+DELETE {{baseUrl}}/api/tasks/{{email}}/{{id}}
+Authorization: Bearer {{refauth.response.body.access_token}}
+
+# ---------------------------
+
+###
+# @name user
+GET {{baseUrl}}/api/users/info
+Authorization: Bearer {{refauth.response.body.access_token}}
+
+
+# ---------------------------
+
+# get tokens ========================= STEP 1 ==========================
+### 
+# @name auth
+POST {{baseUrl}}/api/oauth/token 
+Content-Type: application/json
+
+{
+    "grant_type":"password",
+    "client_id":"{{client_id}}",
+    "client_secret":"{{client_secret}}",
+    "username":"{{username}}",
+    "password":"{{password}}"
+}
+
+
+# get new one ========================= STEP 2 ==========================
+###
+# @name refauth
+POST {{baseUrl}}/api/oauth/token 
+Content-Type: application/json
+
+{
+    "grant_type":"refresh_token",
+    "client_id":"{{client_id}}",
+    "client_secret":"{{client_secret}}",
+    "refresh_token":"{{auth.response.body.refresh_token}}"
+}

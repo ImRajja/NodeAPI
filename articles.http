@@ -1,7 +1,9 @@
 @baseUrl = http://localhost:1337
-@email = mail2rajja@gmail.com
 @id = 62bdaee9679930f1d34bf42c
-
+@client_id = newApp
+@client_secret = newAppSsecret
+@username=raja2
+@password=passpass2
 
 ###
 GET {{baseUrl}}/api/articles
@@ -50,7 +52,10 @@ Content-Type: application/json
 DELETE {{baseUrl}}/api/articles/{{id}}
 Authorization: Bearer {{refauth.response.body.access_token}}
 
+# ---------------------------
+
 ###
+# @name user
 GET {{baseUrl}}/api/users/info
 Authorization: Bearer {{refauth.response.body.access_token}}
 
@@ -65,11 +70,13 @@ Content-Type: application/json
 
 {
     "grant_type":"password",
-    "client_id":"android",
-    "client_secret":"SomeRandomCharsAndNumbers",
-    "username":"myapi",
-    "password":"abc1234"
+    "client_id":"{{client_id}}",
+    "client_secret":"{{client_secret}}",
+    "username":"{{username}}",
+    "password":"{{password}}"
 }
+
+
 
 ###
 # @name refauth
@@ -78,7 +85,11 @@ Content-Type: application/json
 
 {
     "grant_type":"refresh_token",
-    "client_id":"android",
-    "client_secret":"SomeRandomCharsAndNumbers",
+    "client_id":"{{client_id}}",
+    "client_secret":"{{client_secret}}",
     "refresh_token":"{{auth.response.body.refresh_token}}"
 }
+
+###
+    # "username":"myapi",
+    # "password":"abc1234"

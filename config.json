@@ -1,20 +1,42 @@
 {
-    "port": 1337,
-    "security": {
-        "tokenLife" : 3600
-    },
-    "mongoose": {
-        "uri": "mongodb://localhost/apiDB"
-    },
-    "default": {
-        "user": {
-            "username": "myapi",
-            "password": "abc1234"
-        },
-        "client": {
-            "name": "Android API v1",
-            "clientId": "android",
-            "clientSecret": "SomeRandomCharsAndNumbers"
-        }
-    }
+  "port": 1337,
+  "security": {
+    "tokenLife": 3600
+  },
+  "mongoose": {
+    "uri": "mongodb://localhost/apiDB"
+  },
+  "default": {
+    "user": [
+      {
+        "username": "raja",
+        "password": "passpass"
+      },
+      {
+        "username": "raja2",
+        "password": "passpass2"
+      },
+      {
+        "username": "raghav",
+        "password": "123123"
+      }
+    ],
+    "client": [
+      {
+        "name": "Android API v1.0",
+        "clientId": "android",
+        "clientSecret": "SomeRandomCharsAndNumbers"
+      },
+      {
+        "name": "New App",
+        "clientId": "newApp",
+        "clientSecret": "newAppSsecret"
+      },
+      {
+        "name": "Terminal To-do list",
+        "clientId": "terminalTodo",
+        "clientSecret": "terminalTodoSsecret"
+      }
+    ]
+  }
 }
